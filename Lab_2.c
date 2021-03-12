@@ -53,10 +53,16 @@ int main(){
         scanf("%d",&iAthlete[i]->height);
         clearInputBuf();
 
-        //free(surname);
     }
 
     createFile(iAthlete,size);
+
+    //free
+    for(int i = 0; i < size; i++){
+        free(iAthlete[i]);
+    }
+    free(iAthlete);
+
 
     int choice = 0;
     do{
@@ -196,6 +202,7 @@ void changeFile(unsigned int size, const char* name){
             }
 
             fwrite(&instance, sizeof(Athlete),1, newfile);
+
             break;
         }
     }
@@ -239,6 +246,7 @@ void addFile(unsigned int* size){
 
     (*size)++;
     fwrite(&instance, sizeof(Athlete),1, newfile);
+
     fclose(newfile);
 }
 
@@ -258,9 +266,8 @@ void findFile(unsigned int size){
     for(int i = 0; i < size; i++){
 
         fread(&array[i], sizeof(int),1,newfile);
-        fseek(newfile, sizeof(instance),SEEK_CUR);
+        fseek(newfile, sizeof(instance) - sizeof(instance.height),SEEK_CUR);
     }
-
 
     int max = array[0];
     int indexMax = 0;
@@ -283,6 +290,8 @@ void findFile(unsigned int size){
     printf("Athlete's age: %d", instance.age);
     printf( "\nAthlete's height: %d", instance.height);
     puts("\n---------------------\n");
+
+    fclose(newfile);
 
 }
 
